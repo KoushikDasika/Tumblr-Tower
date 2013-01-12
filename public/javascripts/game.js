@@ -1,5 +1,5 @@
 var width = 640,
-    height = 600,
+    height = 500,
     gLoop,
     points = 0,
     state = true,
@@ -152,10 +152,10 @@ document.onmousemove = function(e){
   }
 
 }
-var nrOfPlatforms = 7, 
+var nrOfPlatforms = 3, 
     platforms = [],
-    platformWidth = 70,
-    platformHeight = 20;
+    platformWidth = 100,
+    platformHeight = 100;
 
 var Platform = function(x, y, type){
   var that=this;
