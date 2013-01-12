@@ -1,14 +1,30 @@
 var width = 640,
     height = 500,
     gLoop,
+    catImage,
     points = 0,
+    choice,
     state = true,
+    pics,
     c = document.createElement('canvas'),
+    response,
     ctx = c.getContext('2d');
 
 c.width = width;
 c.height = height;
 document.body.appendChild(c);
+
+$(document).ready(function(){
+    response = $.ajax({
+      dataType: "jsonp",
+      url: "http://api.tumblr.com/v2/blog/ichcheezburger.tumblr.com/posts/photo?api_key=fuiKNFp9vQFvjLNvx4sUwti4Yb5yGutBN4Xh10LXZhhRKjWlV4", 
+      success: function(data){
+        pics = data["response"]["posts"];
+        console.log(pics);
+        GameLoop();
+      }
+    });
+});
 
 var clear = function(){
   ctx.fillStyle = '#d0e7f9';
@@ -152,7 +168,7 @@ document.onmousemove = function(e){
   }
 
 }
-var nrOfPlatforms = 3, 
+var nrOfPlatforms = 2, 
     platforms = [],
     platformWidth = 100,
     platformHeight = 100;
@@ -160,15 +176,19 @@ var nrOfPlatforms = 3,
 var Platform = function(x, y, type){
   var that=this;
 
+  /*
   that.firstColor = '#FF8C00';
   that.secondColor = '#EEEE00';
+  */
   that.onCollide = function(){
     player.fallStop();
   };
 
   if (type === 1) {
+    /*
     that.firstColor = '#AADD00';
     that.secondColor = '#698B22';
+    */
     that.onCollide = function(){
       player.fallStop();
       player.jumpSpeed = 50;
@@ -186,12 +206,29 @@ var Platform = function(x, y, type){
   that.direction= ~~(Math.random() * 2) ? -1 : 1;
 
   that.draw = function(){
+    //Tumblr stuff goes in here
+    catImage = new Image();
+    choice = [Math.floor(Math.random()*20)];
+    var alt = pics[choice].photos[0].alt_sizes.length;
+    var url = pics[choice].photos[0].alt_sizes[alt- 2].url;
+    console.log(url);
+    if(url == undefined){
+      catImage.src = "images/cat.png";
+    }
+    else{
+      catImage.src = url;
+    }
+    catImage.onload = function(){
+      ctx.drawImage(catImage, that.x + (platformWidth/2), that.y + (platformHeight/2));
+    }
+    /*
     ctx.fillStyle = 'rgba(255, 255, 255, 1)';
     var gradient = ctx.createRadialGradient(that.x + (platformWidth/2), that.y + (platformHeight/2), 5, that.x + (platformWidth/2), that.y + (platformHeight/2), 45);
     gradient.addColorStop(0, that.firstColor);
     gradient.addColorStop(1, that.secondColor);
     ctx.fillStyle = gradient;
     ctx.fillRect(that.x, that.y, platformWidth, platformHeight);
+    */
   };
 
   return that;
@@ -270,4 +307,4 @@ var GameOver = function(){
 
 };
 
-GameLoop();
+//GameLoop();

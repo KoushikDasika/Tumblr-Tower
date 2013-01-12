@@ -8,6 +8,7 @@ b-cov
 *.gz
 *.swp
 *.swo
+*.env
 
 pids
 logs
