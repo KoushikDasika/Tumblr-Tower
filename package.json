@@ -6,8 +6,11 @@
     "start": "node app"
   },
   "dependencies": {
-    "express": ">2.2.0",
+    "express": "3.0.6",
     "ejs": "*",
     "mongoose": "*"
+  },
+  "engines": {
+    "node": "0.8.x"
   }
 }
